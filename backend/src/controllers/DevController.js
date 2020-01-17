@@ -39,7 +39,7 @@ module.exports = {
     const schema = Yup.object().shape({
       longitude: Yup.string().required(),
       latitude: Yup.string().required(),
-      techs: Yup.array().required()
+      techs: Yup.string().required()
     });
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: "Validate is failure" });
@@ -71,6 +71,6 @@ module.exports = {
   async destroy(req, res) {
     const { id } = req.params;
     await Dev.findByIdAndDelete(id);
-    return res.status(200);
+    return res.status(200).send();
   }
 };

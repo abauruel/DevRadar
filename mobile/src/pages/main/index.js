@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../services/api";
+import { connect, disconnect, subscribeToNewDevs } from "../../services/socket";
+
 import {
   View,
   Text,
@@ -20,6 +22,18 @@ function main({ navigation }) {
   const [devs, setDevs] = useState([]);
   const [currentRegion, setCurrentRegion] = useState(null);
   const [text, setText] = useState("");
+
+  useEffect(() => {
+    subscribeToNewDevs(dev => setDevs([...devs, dev]));
+  }, [devs]);
+  function setupWebsocket() {
+    disconnect();
+
+    const { latitude, longitude } = currentRegion;
+
+    connect(latitude, longitude, techs);
+  }
+
   async function loadDevs() {
     const { latitude, longitude } = currentRegion;
     const response = await api.get("/search", {
@@ -31,6 +45,7 @@ function main({ navigation }) {
     });
 
     setDevs(response.data);
+    setupWebsocket();
   }
   function handleRegionChange(region) {
     setCurrentRegion(region);

@@ -8,12 +8,12 @@ import {
   StyleSheet,
   Image,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import {
   requestPermissionsAsync,
-  getCurrentPositionAsync
+  getCurrentPositionAsync,
 } from "expo-location";
 import { MaterialIcons } from "@expo/vector-icons";
 //import { Container } from "./styles";
@@ -21,10 +21,10 @@ import { MaterialIcons } from "@expo/vector-icons";
 function main({ navigation }) {
   const [devs, setDevs] = useState([]);
   const [currentRegion, setCurrentRegion] = useState(null);
-  const [text, setText] = useState("");
+  const [techs, setTechs] = useState("");
 
   useEffect(() => {
-    subscribeToNewDevs(dev => setDevs([...devs, dev]));
+    subscribeToNewDevs((dev) => setDevs([...devs, dev]));
   }, [devs]);
   function setupWebsocket() {
     disconnect();
@@ -40,8 +40,8 @@ function main({ navigation }) {
       params: {
         latitude,
         longitude,
-        techs: text
-      }
+        techs: techs,
+      },
     });
 
     setDevs(response.data);
@@ -56,7 +56,7 @@ function main({ navigation }) {
 
       if (granted) {
         const { coords } = await getCurrentPositionAsync({
-          enableHighAccuracy: true
+          enableHighAccuracy: true,
         });
 
         const { latitude, longitude } = coords;
@@ -64,7 +64,7 @@ function main({ navigation }) {
           latitude,
           longitude,
           latitudeDelta: 0.04,
-          longitudeDelta: 0.04
+          longitudeDelta: 0.04,
         });
       }
     }
@@ -82,24 +82,24 @@ function main({ navigation }) {
         initialRegion={currentRegion}
         style={styles.map}
       >
-        {devs.map(dev => (
+        {devs.map((dev) => (
           <Marker
             key={dev._id}
             coordinate={{
               latitude: dev.location.coordinates[1],
-              longitude: dev.location.coordinates[0]
+              longitude: dev.location.coordinates[0],
             }}
           >
             <Image
               style={styles.avatar}
               source={{
-                uri: dev.avatar_url
+                uri: dev.avatar_url,
               }}
             />
             <Callout
               onPress={() => {
                 navigation.navigate("Profile", {
-                  github_username: dev.github_username
+                  github_username: dev.github_username,
                 });
               }}
             >
@@ -120,7 +120,7 @@ function main({ navigation }) {
           autoCapitalize="words"
           autoCorrect={false}
           value={techs}
-          onChangeText={setText}
+          onChangeText={setTechs}
         />
 
         <TouchableOpacity onPress={loadDevs} style={styles.loadButton}>
@@ -133,28 +133,28 @@ function main({ navigation }) {
 
 const styles = StyleSheet.create({
   map: {
-    flex: 1
+    flex: 1,
   },
   avatar: {
     width: 54,
     height: 54,
     borderRadius: 4,
     borderWidth: 4,
-    borderColor: "#FFF"
+    borderColor: "#FFF",
   },
   callout: {
-    width: 260
+    width: 260,
   },
   devname: {
     fontWeight: "bold",
-    fontSize: 16
+    fontSize: 16,
   },
   devbio: {
     color: "#666",
-    marginTop: 5
+    marginTop: 5,
   },
   devtechs: {
-    marginTop: 5
+    marginTop: 5,
   },
 
   searchForm: {
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     zIndex: 5,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   searchInput: {
     flex: 1,
@@ -177,9 +177,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowOffset: {
       width: 4,
-      height: 4
+      height: 4,
     },
-    elevation: 2
+    elevation: 2,
   },
   loadButton: {
     width: 50,
@@ -188,8 +188,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 15
-  }
+    marginLeft: 15,
+  },
 });
 
 export default main;

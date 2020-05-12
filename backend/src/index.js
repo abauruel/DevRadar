@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -9,10 +11,10 @@ const app = express();
 
 const server = http.Server(app);
 setupWebsocket(server);
-mongoose.connect(
-  "mongodb+srv://week10:week10@sandbox-ue8p9.mongodb.net/week10?retryWrites=true&w=majority",
-  { useNewUrlParser: true, useUnifiedTopology: true }
-);
+mongoose.connect(process.env.STRING_CONNECTION, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 app.use(cors());
 app.use(express.json());
 app.use(routes);
